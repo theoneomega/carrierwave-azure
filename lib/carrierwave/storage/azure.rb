@@ -41,7 +41,7 @@ module CarrierWave
 
         def url(options = {})
           path = ::File.join @container, encode_path(@path)
-          
+          puts "-------------------------------#{path}"
           if @uploader.asset_host
             "#{@uploader.asset_host}/#{path}"
           else
