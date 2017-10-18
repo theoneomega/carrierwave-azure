@@ -33,9 +33,12 @@ And then in your uploader, set the storage to `:azure`
 ```ruby
 class ExampleUploader < CarrierWave::Uploader::Base
   storage :azure
+  
+  # def container
+  #   'custom_container_name'   #opcional
+  # end
 end
 ```
-
 ## Contributing
 
 In order to run the integration specs you will need to configure some environment variables.
