@@ -4,13 +4,13 @@ module CarrierWave
   module Storage
     class Azure < Abstract
       def store!(file)
-        azure_file = CarrierWave::Storage::Azure::File.new(uploader, connection, uploader.store_path)
+        azure_file = CarrierWave::Storage::Azure::File.new(uploader, connection, uploader.store_path, uploader.container)
         azure_file.store!(file)
         azure_file
       end
 
       def retrieve!(identifer)
-        CarrierWave::Storage::Azure::File.new(uploader, connection, uploader.store_path(identifer))
+        CarrierWave::Storage::Azure::File.new(uploader, connection, uploader.store_path(identifer), uploader.container)
       end
 
       def connection
@@ -18,28 +18,29 @@ module CarrierWave
           %i(storage_account_name storage_access_key storage_blob_host).each do |key|
             ::Azure.config.send("#{key}=", uploader.send("azure_#{key}"))
           end
-          ::Azure::BlobService.new
+          ::Azure::Blob::BlobService.new
         end
       end
 
       class File
         attr_reader :path
 
-        def initialize(uploader, connection, path)
+        def initialize(uploader, connection, path, container = nil)
           @uploader = uploader
           @connection = connection
           @path = path
+          @container = container.blank? ? uploader.azure_container : container
         end
 
         def store!(file)
           @content = file.read
           @content_type = file.content_type
-          @connection.create_block_blob @uploader.azure_container, @path, @content, content_type: @content_type
+          @connection.create_block_blob @container , @path, @content, content_type: @content_type
           true
         end
 
         def url(options = {})
-          path = ::File.join @uploader.azure_container, @path
+          path = ::File.join @container, @path
           if @uploader.asset_host
             "#{@uploader.asset_host}/#{path}"
           else
@@ -60,7 +61,7 @@ module CarrierWave
           @content_type = new_content_type
         end
 
-        def exitst?
+        def exists?
           blob.nil?
         end
 
