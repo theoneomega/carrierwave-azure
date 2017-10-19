@@ -1,9 +1,9 @@
 # -*- encoding: utf-8 -*-
-# stub: carrierwave-azure 0.0.3 ruby lib
+# stub: carrierwave-azure 0.0.3.2 ruby lib
 
 Gem::Specification.new do |s|
   s.name = "carrierwave-azure"
-  s.version = "0.0.3.1"
+  s.version = "0.0.3.2"
 
   s.required_rubygems_version = Gem::Requirement.new(">= 0") if s.respond_to? :required_rubygems_version=
   s.require_paths = ["lib"]
