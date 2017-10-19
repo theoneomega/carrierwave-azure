@@ -4,13 +4,13 @@ module CarrierWave
   module Storage
     class Azure < Abstract
       def store!(file)
-        azure_file = CarrierWave::Storage::Azure::File.new(uploader, connection, uploader.store_path, uploader.container || uploader.azure_container)
+        azure_file = CarrierWave::Storage::Azure::File.new(uploader, connection, uploader.store_path, (uploader.container || uploader.azure_container))
         azure_file.store!(file)
         azure_file
       end
 
       def retrieve!(identifer)
-        CarrierWave::Storage::Azure::File.new(uploader, connection, uploader.store_path(identifer), uploader.container || uploader.azure_container)
+        CarrierWave::Storage::Azure::File.new(uploader, connection, uploader.store_path(identifer), (uploader.container || uploader.azure_container))
       end
 
       def connection
