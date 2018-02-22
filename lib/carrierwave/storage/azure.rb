@@ -30,6 +30,10 @@ module CarrierWave
           @connection = connection
           @path = path
           @container = container.blank? ? uploader.azure_container : container
+          begin
+            @connection.create_container(@container, public_access_level: "blob")
+          rescue
+          end
         end
 
         def store!(file)
